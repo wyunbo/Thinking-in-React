@@ -1,9 +1,11 @@
+import { Component } from './component';
+import { useState, useEffect } from './react-dom';
 import { wrapToVdom } from './utils';
 import { REACT_ELEMENT } from './constants';
 /**
- * @param {*} type 元素的类型
- * @param {*} config 配置对象
- * @param {*} children  儿子或儿子们
+ * @param {*} type element type
+ * @param {*} config config object
+ * @param {*} children  children
  */
 function createElement(type, config, children) {
   let ref, key;
@@ -28,5 +30,8 @@ function createElement(type, config, children) {
 
 const React = {
   createElement,
+  Component,
+  useState,
+  useEffect,
 };
 export default React;

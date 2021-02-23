@@ -8,14 +8,15 @@
     "@testing-library/user-event": "^12.1.10",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "set DISABLE_NEW_JSX_TRANSFORM=true && react-scripts build",
-    "test": "set DISABLE_NEW_JSX_TRANSFORM=true && react-scripts test",
-    "eject": "set DISABLE_NEW_JSX_TRANSFORM=true && react-scripts eject"
+    "start": "cross-env DISABLE_NEW_JSX_TRANSFORM=true react-scripts start",
+    "build": "cross-env DISABLE_NEW_JSX_TRANSFORM=true react-scripts build",
+    "test": "cross-env DISABLE_NEW_JSX_TRANSFORM=true react-scripts test",
+    "eject": "cross-env DISABLE_NEW_JSX_TRANSFORM=true react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -35,5 +36,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
 }

@@ -1,36 +1,38 @@
 import React from './react';
 import ReactDOM from './react-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
+import Home from './pages/home';
+import FunctionComp from './pages/functionComp';
+import ClassComp from './pages/classComp';
+import LifeCycle from './pages/lifeCycle';
+import Hooks from './pages/hooks';
 
-// JSX
-const element = (
-  <div>
-    <span>Welcome, </span>
-    <span>xxx</span>
-  </div>
-);
-//Need JSX translate, babel translate
-// JSX translation -> React.createElement
-let result = React.createElement(
-  'div',
-  null,
-  React.createElement('span', null, 'Welcome, '),
-  React.createElement('span', null, 'xxx')
-);
-// -> virtual DOM
-// result = {
-//   type: 'div',
-//   props: {
-//     children: [
-//       { type: 'span', props: { chidlren: 'Welcome' } },
-//       { type: 'span', props: { children: 'xxx' } },
-//     ],
-//   },
-// };
+console.log(App());
 
-console.log(element, result);
-
-ReactDOM.render(result, document.getElementById('root'));
-
-if (module.hot) {
-  module.hot.accept();
+function App() {
+  return (
+    <div>
+      <ClassComp
+        title="Class compoent demo"
+        style={{ backgroundColor: '#ccc', color: '#' }}
+      />
+      <FunctionComp
+        title="Function component demo"
+        style={{ backgroundColor: 'green', color: '#fff' }}
+      />
+    </div>
+    // <BrowserRouter>
+    //   {NavItems.map((item) => (
+    //     <Route
+    //       key={item.path}
+    //       path={item.path}
+    //       exact
+    //       component={item.component}
+    //     />
+    //   ))}
+    // </BrowserRouter>
+    // <Home />
+  );
 }
+
+ReactDOM.render(<App name="app" />, document.getElementById('root'));

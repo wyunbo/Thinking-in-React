@@ -1,8 +1,8 @@
 import { REACT_TEXT } from './constants';
 /**
- * 为了后面的DOM-DIFF，我把文本节点进行单独的封装或者说标识
- * 不管你原来是什么，都全部包装成React元素的形式。
- * @param {*} element 可能是一个React元素，也可以是一个字符串或者数字
+ * for the following DOM-DIFF, individually encapsulate or identify the text node
+ * no matter what you are, all are packaged in the form of React elements.
+ * @param {*} element it can be a React element, it can be a string or a number
  */
 export function wrapToVdom(element) {
   return typeof element === 'string' || typeof element === 'number'
