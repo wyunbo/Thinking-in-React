@@ -1,5 +1,11 @@
 import { Component } from './component';
-import { useState, useEffect } from './react-dom';
+import {
+  useState,
+  useReducer,
+  useEffect,
+  useCallback,
+  useMemo,
+} from './react-dom';
 import { wrapToVdom } from './utils';
 import { REACT_ELEMENT } from './constants';
 /**
@@ -32,6 +38,9 @@ const React = {
   createElement,
   Component,
   useState,
+  useReducer,
   useEffect,
+  useCallback,
+  useMemo,
 };
 export default React;

@@ -33,6 +33,47 @@ export function useEffect(callback, dependencies) {
   }
 }
 
+export function useMemo(factory, deps) {
+  deps = Array.isArray(deps) ? deps : [deps];
+  if (hookStates[hookIndex]) {
+    const [lastMemo, lastDeps] = hookStates[hookIndex];
+    const same = deps.every((item, index) => item === lastDeps[index]);
+    if (same) {
+      hookIndex++;
+      return lastMemo;
+    } else {
+      return newMemo();
+    }
+  } else {
+    return newMemo();
+  }
+  function newMemo() {
+    const newMemo = factory();
+    hookStates[hookIndex++] = [newMemo, deps];
+    return newMemo;
+  }
+}
+
+export function useCallback(callback, deps) {
+  deps = Array.isArray(deps) ? deps : [deps];
+  if (hookStates[hookIndex]) {
+    const [lastCallback, lastDeps] = hookStates[hookIndex];
+    const same = deps.every((item, index) => item === lastDeps[index]);
+    if (same) {
+      hookIndex++;
+      return lastCallback;
+    } else {
+      return newCallback();
+    }
+  } else {
+    return newCallback();
+  }
+  function newCallback() {
+    hookStates[hookIndex++] = [callback, deps];
+    return callback;
+  }
+}
+
 export function useState(initialState) {
   return useReducer(null, initialState);
 }
@@ -52,7 +93,7 @@ export function useReducer(reducer, initialState) {
     const lastState = hookStates[currentIndex]; // get old state
     let nextState;
     if (reducer) {
-      nextState = reducer(nextState, action);
+      nextState = reducer(lastState, action);
     } else {
       if (typeof action === 'function') {
         nextState = action(lastState);
