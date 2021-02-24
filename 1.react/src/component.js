@@ -127,9 +127,14 @@ export class Component {
     const newRenderVdom = this.render(); // call render again, get new vdom
     const oldRenderVdom = this.oldRenderVdom;
     const oldDOM = findDOM(oldRenderVdom);
+    const extraArgs =
+      this.getSnapshotBeforeUpdate && this.getSnapshotBeforeUpdate();
     // deep compare new and old virtual DOM
     compareTwoVdom(oldDOM.parentNode, oldRenderVdom, newRenderVdom);
     this.oldRenderVdom = newRenderVdom;
+    if (this.componentDidUpdate) {
+      this.componentDidUpdate(this.props, this.state, extraArgs);
+    }
   }
 }
 
