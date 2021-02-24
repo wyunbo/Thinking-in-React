@@ -301,7 +301,7 @@ function mountClassComponent(vdom) {
   if (ref) {
     classInstance.ref = ref; // ref in vdom -> instance of class component
   }
-  vdom.classInstnce = classInstance;
+  vdom.classInstance = classInstance;
   if (classInstance.componentWillMount) {
     classInstance.componentWillMount();
   }

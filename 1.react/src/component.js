@@ -44,7 +44,7 @@ class Updater {
       shouldUpdate(classInstance, nextProps, this.getState(nextProps));
     }
   }
-  getState() {
+  getState(nextProps) {
     // get latest state
     const { classInstance, pendingStates } = this;
     let { state } = classInstance;
@@ -56,6 +56,15 @@ class Updater {
       state = { ...state, ...nextState };
     });
     pendingStates.length = 0; // empty array
+    if (classInstance.constructor.getDerivedStateFromProps) {
+      const partialState = classInstance.constructor.getDerivedStateFromProps(
+        nextProps,
+        classInstance.state
+      );
+      if (partialState) {
+        state = { ...state, ...partialState };
+      }
+    }
 
     return state;
   }
@@ -95,6 +104,21 @@ export class Component {
   }
   setState(partialState, callback) {
     this.updater.addState(partialState, callback);
+  }
+  forceUpdate() {
+    let nextState = this.state;
+    let nextProps = this.props;
+    if (this.constructor.getDerivedStateFromProps) {
+      const partialState = this.constructor.getDerivedStateFromProps(
+        nextProps,
+        nextProps
+      );
+      if (partialState) {
+        nextState = { ...nextState, partialState };
+      }
+    }
+    this.state = nextState;
+    this.updateComponent();
   }
   updateComponent() {
     const newRenderVdom = this.render(); // call render again, get new vdom
