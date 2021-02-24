@@ -301,6 +301,9 @@ function mountClassComponent(vdom) {
   if (ref) {
     classInstance.ref = ref; // ref in vdom -> instance of class component
   }
+  if (type.contextType) {
+    classInstance.context = type.contextType._currentValue;
+  }
   vdom.classInstance = classInstance;
   if (classInstance.componentWillMount) {
     classInstance.componentWillMount();

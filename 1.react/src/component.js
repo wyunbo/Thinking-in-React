@@ -89,6 +89,9 @@ function shouldUpdate(classInstance, nextProps, nextState) {
     classInstance.props = nextProps;
   }
   classInstance.state = nextState;
+  if (classInstance.constructor.contextType) {
+    classInstance.context = classInstance.constructor.contextType._currentValue;
+  }
   // if need to update, execute component logic
   if (willUpdate) {
     classInstance.updateComponent();
