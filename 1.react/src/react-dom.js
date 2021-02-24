@@ -115,11 +115,49 @@ export function compareTwoVdom(parentDOM, oldVdom, newVdom, nextDOM) {
     // both null
     return null;
   } else if (oldVdom && !newVdom) {
-    // old not null and new null, means this node has been deleted
+    // old exsit but new is null, it means this node has been deleted.
+    const currentDOM = findDOM(oldVdom);
+    if (currentDOM) parentDOM.removeChild(currentDOM);
+    if (oldVdom.classInstance && oldVdom.classInstance.componentWillUnmount) {
+      oldVdom.classInstance.componentWillUnmount();
+    }
+    if (hookStates[hookIndex]) {
+      const [destroyFunction] = hookStates[hookIndex];
+      destroyFunction && destroyFunction();
+    }
   } else if (!oldVdom && newVdom) {
-    // old null and new not null, create DOM node
+    // old is null but new exsit, it means create DOM node
+    const newDOM = createDOM(newVdom); // Create a new real DOM and mount dom to parentNode
+    if (nextDOM) {
+      // if there is next brother DOM, insert it in front of the brother.
+      parentDOM.insertBefore(newDOM, nextDOM);
+    } else {
+      parentDOM.appendChild(newDOM);
+    }
+    // execute new vdom didmount event
+    if (
+      newVdom.classInstance &&
+      newVdom.classInstance.componentWillReceiveProps
+    ) {
+      newVdom.classInstance.componentWillReceiveProps();
+    }
   } else if (oldVdom && newVdom && oldVdom.type !== newVdom.type) {
+    // if both exist but different type, also need to change old to new
+    const oldDOM = oldVdom.dom;
+    const newDOM = createDOM(newVdom);
+    oldDOM.parentNode.replaceChild(newDOM, oldDOM);
+    if (oldVdom.classInstance && oldVdom.classInstance.componentWillUnmount) {
+      oldVdom.classInstance.componentWillUnmount();
+    }
+    if (hookStates[hookIndex]) {
+      const [destroyFunction] = hookStates[hookIndex];
+      destroyFunction && destroyFunction();
+    }
+    if (newVdom.classInstance && newVdom.classInstance.componentDidMount) {
+      newVdom.classInstance.componentDidMount();
+    }
   } else {
+    // if both exist and same type
     updateElement(oldVdom, newVdom);
   }
 }
