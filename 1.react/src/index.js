@@ -13,12 +13,16 @@ function App() {
   return (
     <div>
       <ClassComp
-        title="Class compoent demo"
+        title="Class component demo"
         style={{ backgroundColor: '#ccc', color: '#' }}
       />
       <FunctionComp
         title="Function component demo"
         style={{ backgroundColor: 'green', color: '#fff' }}
+      />
+      <Hooks
+        title="Hooks demo"
+        style={{ backgroundColor: '#31c4cc', color: '#fff' }}
       />
     </div>
     // <BrowserRouter>

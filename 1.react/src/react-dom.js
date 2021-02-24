@@ -33,6 +33,34 @@ export function useEffect(callback, dependencies) {
   }
 }
 
+export function useLayoutEffect(callback, dependencies) {
+  if (hookStates[hookIndex]) {
+    const [destroyFunction, lastDependencies] = hookStates[hookIndex];
+    const allTheSame =
+      dependencies &&
+      dependencies.every((item, index) => item === lastDependencies[index]);
+    if (allTheSame) {
+      hookIndex++;
+    } else {
+      destroyFunction && destroyFunction();
+      // Put function to micro task queue
+      queueMicrotask(dispatch);
+    }
+  } else {
+    // first render
+    Promise.resolve().then(dispatch);
+  }
+  function dispatch() {
+    const destroyFunction = callback();
+    hookStates[hookIndex++] = [destroyFunction, dependencies];
+  }
+}
+
+export function useRef(initialState) {
+  hookStates[hookIndex] = hookStates[hookIndex] || { current: initialState };
+  return hookStates[hookIndex++];
+}
+
 export function useMemo(factory, deps) {
   deps = Array.isArray(deps) ? deps : [deps];
   if (hookStates[hookIndex]) {
@@ -110,6 +138,13 @@ export function useReducer(reducer, initialState) {
   return [hookStates[hookIndex++], dispatch];
 }
 
+/**
+ * DOM-DIFF
+ * @param {*} parentDOM parent real DOM
+ * @param {*} oldVdom last virtual DOM
+ * @param {*} newVdom current virtual DOM
+ * @param {*} nextDOM brother node behind
+ */
 export function compareTwoVdom(parentDOM, oldVdom, newVdom, nextDOM) {
   if (!oldVdom && !newVdom) {
     // both null
@@ -323,6 +358,9 @@ function createDOM(vdom) {
     }
   }
   vdom.dom = dom;
+  if (ref) {
+    ref.current = dom;
+  }
   return dom;
 }
 

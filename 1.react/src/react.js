@@ -3,8 +3,10 @@ import {
   useState,
   useReducer,
   useEffect,
+  useLayoutEffect,
   useCallback,
   useMemo,
+  useRef,
 } from './react-dom';
 import { wrapToVdom } from './utils';
 import { REACT_ELEMENT } from './constants';
@@ -49,8 +51,10 @@ const React = {
   useState,
   useReducer,
   useEffect,
+  useLayoutEffect,
   memo,
   useMemo,
   useCallback,
+  useRef,
 };
 export default React;
