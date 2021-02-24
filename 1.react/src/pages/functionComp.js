@@ -25,7 +25,7 @@ function memberReducer(state, action) {
   }
 }
 
-function functionComp(props) {
+function FunctionComp(props) {
   const { title, style } = props;
   const [number, setNumber] = React.useState(0);
   const [members, memberDispatch] = React.useReducer(memberReducer, []);
@@ -91,4 +91,4 @@ function functionComp(props) {
   );
 }
 
-export default functionComp;
+export default FunctionComp;

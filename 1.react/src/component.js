@@ -105,3 +105,44 @@ export class Component {
     this.oldRenderVdom = newRenderVdom;
   }
 }
+
+export class PureComponent extends Component {
+  // update only if state or props has been changed
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      !shallowEqual(this.props, nextProps) ||
+      !shallowEqual(this.state, nextState)
+    );
+  }
+}
+
+/**
+ * shallow compare obj1 and obj2
+ * As long as the reference addresses are the same, they are considered equal
+ * @param {*} obj1
+ * @param {*} obj2
+ */
+function shallowEqual(obj1, obj2) {
+  if (obj1 === obj2) return true; // if reference addresses equal, they are considerd equal, don't care if atrributes change.
+  if (
+    typeof obj1 !== 'object' ||
+    obj1 === null ||
+    typeof obj2 !== 'object' ||
+    obj2 === null
+  ) {
+    // Either is not an object, or null, consider not equal
+    return false;
+  }
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+  if (keys1.length !== keys2.length) {
+    // Attribute count different, not equal
+    return false;
+  }
+  for (let key of keys1) {
+    if (!obj2.hasOwnProperty(key) || obj1[key] !== obj2[key]) {
+      return false;
+    }
+  }
+  return true;
+}

@@ -1,4 +1,4 @@
-import { Component } from './component';
+import { Component, PureComponent } from './component';
 import {
   useState,
   useReducer,
@@ -34,13 +34,23 @@ function createElement(type, config, children) {
   };
 }
 
+function memo(FunctionComponent) {
+  return class MemoComp extends PureComponent {
+    return() {
+      return FunctionComponent(this.props);
+    }
+  };
+}
+
 const React = {
   createElement,
   Component,
+  PureComponent,
   useState,
   useReducer,
   useEffect,
-  useCallback,
+  memo,
   useMemo,
+  useCallback,
 };
 export default React;
