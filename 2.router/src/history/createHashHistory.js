@@ -19,7 +19,11 @@ function createHashHistory() {
     } else {
       state = nextState;
     }
-    window.location.hash = pathname;
+    if (window.location.hash) {
+      hashChange();
+    } else {
+      window.location.hash = '/';
+    }
   }
   function replace(pathname, nextState) {
     action = 'REPLACE';
@@ -29,7 +33,11 @@ function createHashHistory() {
     } else {
       state = nextState;
     }
-    window.location.hash = pathname;
+    if (window.location.hash) {
+      hashChange();
+    } else {
+      window.location.hash = '/';
+    }
   }
   function go(n) {
     action = 'POP';
@@ -56,7 +64,7 @@ function createHashHistory() {
     listen,
   };
 
-  window.addEventListener('hashchange', () => {
+  const hashChange = () => {
     let pathname = window.location.hash.slice(1); // remove #
     Object.assign(history, { action, location: { pathname, state } });
     if (!action || action === 'PUSH') {
@@ -65,7 +73,8 @@ function createHashHistory() {
       historyStack[historyIndex] = history.location;
     }
     listeners.forEach((listener) => listener(history.location));
-  });
+  };
+  window.addEventListener('hashchange', hashChange);
 
   return history;
 }

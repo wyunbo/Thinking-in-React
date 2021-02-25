@@ -50,7 +50,7 @@ function createBrowserHistory() {
     notify({ action, location });
   }
   window.onpopstate = (event) => {
-    nofity({
+    notify({
       action: 'POP',
       location: {
         pathname: window.location.pathname,
@@ -59,7 +59,7 @@ function createBrowserHistory() {
     });
   };
   const history = {
-    action: 'POP', //当前最后一个动作是什么动作 push PUSH  goBack POP
+    action: 'POP', // PUSH, REPLACE, POP
     location: {
       pathname: window.location.pathname,
       state: globalHistory.state,
