@@ -7,11 +7,11 @@ class Switch extends React.Component {
   render() {
     const { location } = this.context;
     let element, match;
-
+    // this.props.children can be undefined or object or array or string or number.
     React.Children.forEach(this.props.children, (child) => {
       if (!match && React.isValidElement(child)) {
         element = child;
-        match = matchPath(location.pathname, child, props);
+        match = matchPath(location.pathname, child.props);
       }
     });
     return match ? React.cloneElement(element, { computedMatch: match }) : null;
