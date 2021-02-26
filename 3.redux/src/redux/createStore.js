@@ -28,6 +28,8 @@ function createStore(reducer, preloadedState) {
     listeners.forEach((l) => l());
     return action;
   }
+  // When creating a store, an action will be dispatched first to make the default value set by the reducer take effect.
+  dispatch({ type: '@@REDUX/INIT' });
   const store = {
     getState,
     subscribe,
