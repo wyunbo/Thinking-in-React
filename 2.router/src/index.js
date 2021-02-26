@@ -3,64 +3,55 @@ import ReactDOM from 'react-dom';
 import {
   BrowserRouter,
   Route,
-  Switch,
-  Redirect,
-  NavLink,
+  Link,
+  useParams,
+  useLocation,
+  useHistory,
+  useRouteMatch,
 } from './react-router-dom';
-import Home from './components/Home';
-import User from './components/User';
-import Profile from './components/Profile';
-import Protected from './components/Protected';
-import Login from './components/Login';
 
+const Home = () => <div>Home</div>;
+function UserDetail() {
+  let params = useParams(); // get path parameters
+  console.log('params', params);
+  let location = useLocation(); // get location object
+  console.log('location', location);
+  let history = useHistory(); // get history object
+  console.log('history', history);
+  return (
+    <div>
+      id:{params.id} name:{location.state.name}
+    </div>
+  );
+}
+function Post() {
+  let match = useRouteMatch({
+    path: '/post/:id', // match path
+    strict: true,
+    sensitive: true,
+  });
+  return match ? <div>id:{match.params.id}</div> : <div>Not Found</div>;
+}
 ReactDOM.render(
   <BrowserRouter>
     <ul>
       <li>
-        <NavLink
-          className="baseClass"
-          style={{ textDecoration: 'line-through' }}
-          activeStyle={{ color: 'red' }}
-          activeClassName="strong"
-          exact={true}
-          to="/"
-        >
-          首页
-        </NavLink>
+        <Link to="/">Home</Link>
       </li>
       <li>
-        <NavLink
-          className="baseClass"
-          style={{ textDecoration: 'line-through' }}
-          activeStyle={{ color: 'red' }}
-          activeClassName="strong"
-          exact={true}
-          to="/user"
+        <Link
+          to={{ pathname: `/user/detail/1`, state: { id: 1, name: '张三' } }}
         >
-          用户管理
-        </NavLink>
+          User detail
+        </Link>
       </li>
       <li>
-        <NavLink
-          className="baseClass"
-          style={{ textDecoration: 'line-through' }}
-          activeStyle={{ color: 'red' }}
-          activeClassName="strong"
-          exact={true}
-          to="/profile"
-        >
-          个人中心
-        </NavLink>
+        <Link to="/post/1">Post</Link>
       </li>
     </ul>
-
-    <Switch>
-      <Route exact={true} path="/" component={Home} />
-      <Route path="/user" component={User} />
-      <Route path="/login" component={Login} />
-      <Protected path="/profile" component={Profile} />
-      <Redirect to="/" />
-    </Switch>
+    <Route path="/" component={Home} />
+    <Route path="/user/detail/:id" component={UserDetail} />
+    <Route path="/post/:id" component={Post} />
   </BrowserRouter>,
   document.getElementById('root')
 );
